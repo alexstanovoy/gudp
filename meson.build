@@ -26,7 +26,7 @@ project_sources = []
 project_header_files = []
 project_test_sources = []
 
-inc = [include_directories('include')]
+inc = [ include_directories('include') ]
 
 subdir('src')
 
@@ -34,28 +34,18 @@ if get_option('enable-tests')
   subdir('tests')
 endif
 
-doxygen = find_program('doxygen')
-generate_docs = run_target(
-  'docs',
-  command: [
-    doxygen,
-    'config/doxygen.cfg'
-  ]
+doxygen = find_program(
+  'doxygen',
+  required: false
 )
-
-configure_file(
-  input : '.clang-format',
-  output : '.clang-format',
-  copy: true
-)
-run_target(
-  'format',
-  command : [
-    'clang-format',
-    '-i',
-    '-style=file',
-    project_sources,
-    project_test_sources,
-    project_header_files
-  ]
-)
+if doxygen.found()
+  generate_docs = run_target(
+    'generate-docs',
+    command: [
+      doxygen,
+      'doxyfile'
+    ]
+  )
+else
+  warning('Doxygen was\'nt found. "generate-docs" target won\'t be added')
+endif

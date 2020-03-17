@@ -1,5 +1,5 @@
 if target_os == 'linux'
-  udplowlevel = files('udplowlevel_linux.c')
+  udplowlevel = files('socket_linux.c')
 endif
 
 project_sources += udplowlevel

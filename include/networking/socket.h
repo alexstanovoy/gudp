@@ -1,9 +1,14 @@
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
+
+#include "common/retcodes.h"
+
 /**
  * @brief      A crossplatform structure that represents OS socket.
  */
-typedef struct gudp_socket_ipv4 ipv4_sock;
+typedef struct gudp_socket_ipv4 IPv4Sock;
 
 /**
  * @brief      Initializes the sockets. Must be used before creating sockets on
@@ -34,7 +39,7 @@ ShutdownSockets();
  *             SOCKET_CREATION_FAILED when error occures.
  */
 RETCODE
-CreateSocket(ipv4_sock* sock);
+CreateSocket(IPv4Sock* sock);
 
 /**
  * @brief      Closes the socket.
@@ -45,7 +50,7 @@ CreateSocket(ipv4_sock* sock);
  *             error occures.
  */
 RETCODE
-CloseSocket(ipv4_sock* sock);
+CloseSocket(IPv4Sock* sock);
 
 /**
  * @brief      Bind the socket for listening.
@@ -58,7 +63,7 @@ CloseSocket(ipv4_sock* sock);
  *             occures.
  */
 RETCODE
-BindSocket(ipv4_sock* sock, uint32_t addr, uint16_t port);
+BindSocket(IPv4Sock* sock, uint32_t addr, uint16_t port);
 
 /**
  * @brief      Connects a socket to the server.
@@ -71,7 +76,7 @@ BindSocket(ipv4_sock* sock, uint32_t addr, uint16_t port);
  *             error occures.
  */
 RETCODE
-ConnectSocket(ipv4_sock* sock, uint32_t addr, uint16_t port);
+ConnectSocket(IPv4Sock* sock, uint32_t addr, uint16_t port);
 
 /**
  * @brief      Sends a message to specified adress via socket.
@@ -79,12 +84,15 @@ ConnectSocket(ipv4_sock* sock, uint32_t addr, uint16_t port);
  * @param      sock  The pointer to socket.
  * @param      msg   The pointer to the start of the message.
  * @param[in]  len   The number of bytes to send from the message
+ * @param[in]  flags The flags
+ *
+ * @todo       Detailed flag description in SendMessage(),
  *
  * @return     SUCCESS if sending is successiful, and SOCKET_SEND_FAILED when
  *             error occures.
  */
 RETCODE
-SendMessage(ipv4_sock* sock, void* msg, size_t len);
+SendMessage(IPv4Sock* sock, void* msg, size_t len, int flags);
 
 /**
  * @brief      Receive a message via provided socket.
@@ -101,4 +109,4 @@ SendMessage(ipv4_sock* sock, void* msg, size_t len);
  *             error occures.
  */
 RETCODE
-ReceiveMessage(ipv4_sock* sock, void* buf, size_t len, int flags);
+ReceiveMessage(IPv4Sock* sock, void* buf, size_t len, int flags);

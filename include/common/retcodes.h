@@ -18,7 +18,7 @@ typedef enum retcode {
   SOCKET_BIND_FAILED = -5,
   /// ConnectSocket() error; Socket connect failed.
   SOCKET_CONNECT_FAILED = -6,
-  /// SendMessage() error; Sending failed.
+  /// SendMessage() error; Message sending failed.
   SOCKET_SEND_FAILED = -7,
   /// SendMessage() error; Not all bytes were send.
   SOCKET_SEND_LESSLEN = -8,
