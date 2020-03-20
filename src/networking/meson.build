@@ -1,10 +1,10 @@
 if target_os == 'linux'
-  udplowlevel = files('socket_linux.c')
+  socket = files('socket_linux.c')
 endif
 
-project_sources += udplowlevel
-udplowlevel_lib = static_library(
-  'udplowlevel',
-  udplowlevel,
+project_sources += socket
+socket_lib = static_library(
+  'socket',
+  socket,
   include_directories : inc
 )

@@ -43,7 +43,7 @@ if doxygen.found()
     'generate-docs',
     command: [
       doxygen,
-      'doxyfile'
+      'docs/doxycfg/doxyfile'
     ]
   )
 else

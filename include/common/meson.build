@@ -1,2 +1,1 @@
-project_header_files += files('retcodes.h')
-project_header_files += files('global.h')
+project_header_files += files('retcode.h')

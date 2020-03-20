@@ -5,35 +5,43 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "common/retcodes.h"
+#include "common/retcode.h"
 #include "networking/socket.h"
 
-typedef struct gudp_socket_ipv4 {
+typedef struct gudp_socket_t {
   int socket_fd;
-} IPv4Sock;
+} Socket;
+
+typedef struct gudp_address_t {
+  uint32_t ip;
+  uint16_t port;
+} Address;
+
+typedef enum gudp_socket_flags {
+  SOCKET_NONBLOCKING = MSG_DONTWAIT,
+} FLAG;
 
 RETCODE
-InitializeSockets() {
+SocketsInit() {
   return SUCCESS;
 }
 
 RETCODE
-ShutdownSockets() {
+SocketsShutdown() {
   return SUCCESS;
 }
 
 RETCODE
-CreateSocket(IPv4Sock* sock) {
-  int socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  if (socket_fd < 0) {
+SocketCreate(Socket* sock) {
+  sock->socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  if (sock->socket_fd < 0) {
     return SOCKET_CREATION_FAILED;
   }
-  sock->socket_fd = socket_fd;
   return SUCCESS;
 }
 
 RETCODE
-CloseSocket(IPv4Sock* sock) {
+SocketClose(Socket* sock) {
   if (close(sock->socket_fd) < 0) {
     return SOCKET_CLOSING_FAILED;
   }
@@ -41,9 +49,10 @@ CloseSocket(IPv4Sock* sock) {
 }
 
 RETCODE
-BindSocket(IPv4Sock* sock, uint32_t addr, uint16_t port) {
-  struct sockaddr_in server_sockaddr = {
-      .sin_family = AF_INET, .sin_addr = addr, .sin_port = htons(port)};
+SocketBind(Socket* sock, Address* addr) {
+  struct sockaddr_in server_sockaddr = {.sin_family = AF_INET,
+                                        .sin_addr = htonl(addr->ip),
+                                        .sin_port = htons(addr->port)};
   if (bind(sock->socket_fd, (const struct sockaddr*)&server_sockaddr,
            sizeof(struct sockaddr_in)) < 0) {
     return SOCKET_BIND_FAILED;
@@ -52,9 +61,10 @@ BindSocket(IPv4Sock* sock, uint32_t addr, uint16_t port) {
 }
 
 RETCODE
-ConnectSocket(IPv4Sock* sock, uint32_t addr, uint16_t port) {
-  struct sockaddr_in server_sockaddr = {
-      .sin_family = AF_INET, .sin_addr = addr, .sin_port = htons(port)};
+SocketConnect(Socket* sock, Address* addr) {
+  struct sockaddr_in server_sockaddr = {.sin_family = AF_INET,
+                                        .sin_addr = htonl(addr->ip),
+                                        .sin_port = htons(addr->port)};
   if (connect(sock->socket_fd, (const struct sockaddr*)&server_sockaddr,
               sizeof(struct sockaddr_in)) < 0) {
     return SOCKET_CONNECT_FAILED;
@@ -63,17 +73,17 @@ ConnectSocket(IPv4Sock* sock, uint32_t addr, uint16_t port) {
 }
 
 RETCODE
-SendMessage(IPv4Sock* sock, void* msg, size_t len, int flags) {
-  ssize_t sended_cnt = send(sock->socket_fd, msg, len, flags);
-  if (sended_cnt < 0) {
-    return SOCKET_SEND_FAILED;
-  }
-  if (sended_cnt < (ssize_t)len) {
-    return SOCKET_SEND_LESSLEN;
-  }
-  return SUCCESS;
+SocketSendTo(Socket* sock, Data* data, Address* addr, int flags) {
 }
 
 RETCODE
-ReceiveMessage(IPv4Sock* sock, void* msg, size_t len, int flags) {
+SocketSend(Socket* sock, Data* data, int flags) {
+}
+
+RETCODE
+SocketReceiveFrom(Socket* sock, Data* data, Address* addr, int flags) {
+}
+
+RETCODE
+SocketReceive(Socket* sock, Data* data, int flags) {
 }

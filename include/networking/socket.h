@@ -1,112 +1,152 @@
+/**
+ * @file socket.h
+ *
+ * @brief      Provides structures and functions for conveniant,
+ *             platform-independent socket creation, destroying and
+ *             modification.
+ */
+
 #pragma once
 
 #include <stddef.h>
 #include <stdint.h>
 
-#include "common/retcodes.h"
+#include "common/retcode.h"
+#include "networking/packet.h"
 
 /**
  * @brief      A crossplatform structure that represents OS socket.
  */
-typedef struct gudp_socket_ipv4 IPv4Sock;
+typedef struct gudp_socket_t Socket;
 
 /**
- * @brief      Initializes the sockets. Must be used before creating sockets on
- *             Windows.
- *
- * @return     SUCCESS if initialization is successiful, and
- *             WINSOCK_INIT_FAILURE when error occures.
+ * @brief      A structure that represents address. Can be IPv4 or IPv6
+ *             depending on compile options.
  */
-RETCODE
-InitializeSockets();
+typedef struct gudp_address_t Address;
 
 /**
- * @brief      Shutdowns the socket. Must be used jafter creating sockets on
- *             Windows.
+ * @brief      A enumeration that stores flags for operations with sockets.
+ *             Exact values are platform-dependent.
+ */
+typedef enum gudp_socket_flags FLAG;
+
+/**
+ * @brief      Initializes the sockets. Must be used before creating sockets.
  *
- * @return     SUCCESS if shutdown is successiful, and WINSOCK_CLEANUP_FAILURE
+ * @return     SUCCESS if initialization is successiful, and SOCKET_INIT_FAILURE
  *             when error occures.
  */
 RETCODE
-ShutdownSockets();
+SocketInit();
+
+/**
+ * @brief      Shutdowns the sockets. Must be used after closing sockets.
+ *
+ * @return     SUCCESS if shutdown is successiful, and SOCKET_CLEANUP_FAILURE
+ *             when error occures.
+ */
+RETCODE
+SocketShutdown();
 
 /**
  * @brief      Creates a socket.
  *
- * @param      sock  The pointer to resulting socket.
+ * @param      sock  The pointer to the socket.
  *
  * @return     Socket file descriptor if creation is successiful, and
  *             SOCKET_CREATION_FAILED when error occures.
  */
 RETCODE
-CreateSocket(IPv4Sock* sock);
+SocketCreate(Socket* sock);
 
 /**
  * @brief      Closes the socket.
  *
- * @param      sock  The pointer to resulting socket.
+ * @param      sock  The pointer to the socket.
  *
  * @return     SUCCESS if closing is successiful, and SOCKET_CLOSING_FAILED when
  *             error occures.
  */
 RETCODE
-CloseSocket(IPv4Sock* sock);
+SocketClose(Socket* sock);
 
 /**
  * @brief      Bind the socket for listening.
  *
- * @param      sock  The pointer to socket.
- * @param[in]  addr  The IPv4 address.
- * @param[in]  port  The port.
+ * @param      sock  The pointer to the socket.
+ * @param      addr  The address.
  *
  * @return     SUCCESS if bind is successiful, and SOCKET_BIND_FAILED when error
  *             occures.
  */
 RETCODE
-BindSocket(IPv4Sock* sock, uint32_t addr, uint16_t port);
+SocketBind(Socket* sock, Address* addr);
 
 /**
  * @brief      Connects a socket to the server.
  *
- * @param      sock  The pointer to socket.
- * @param[in]  addr  The IPv4 address.
- * @param[in]  port  The port.
+ * @param      sock  The pointer to the socket.
+ * @param      addr  The address.
  *
  * @return     SUCCESS if connect is successiful, and SOCKET_CONNECT_FAILED when
  *             error occures.
  */
 RETCODE
-ConnectSocket(IPv4Sock* sock, uint32_t addr, uint16_t port);
+SocketConnect(Socket* sock, Address* addr);
 
 /**
- * @brief      Sends a message to specified adress via socket.
+ * @brief      Sends message to the address via socket with specified flags.
  *
- * @param      sock  The pointer to socket.
- * @param      msg   The pointer to the start of the message.
- * @param[in]  len   The number of bytes to send from the message
- * @param[in]  flags The flags
- *
- * @todo       Detailed flag description in SendMessage(),
- *
- * @return     SUCCESS if sending is successiful, and SOCKET_SEND_FAILED when
- *             error occures.
- */
-RETCODE
-SendMessage(IPv4Sock* sock, void* msg, size_t len, int flags);
-
-/**
- * @brief      Receive a message via provided socket.
- *
- * @param      sock   The pointer to socket.
- * @param      buf    The pointer to the start of the buffer.
- * @param[in]  len    The buffer length.
+ * @param      sock   The pointer to the socket.
+ * @param      data   The pointer to the message.
+ * @param      addr   The address.
  * @param[in]  flags  The flags.
  *
- * @todo       Detailed flag description in ReceiveMessage(), implementation on
- *             Linux.
- *
- * @return     SUCCESS if sending is successiful, and SOCKET_RECEIVE_FAILED when
+ * @return     SUCCESS if sending is successiful, and SOCKET_SENDTO_FAILED when
  *             error occures.
  */
 RETCODE
-ReceiveMessage(IPv4Sock* sock, void* buf, size_t len, int flags);
+SocketSendTo(Socket* sock, Data* data, Address* addr, int flags);
+
+/**
+ * @brief      Sends message via socket with specified flags. Socket must be
+ *             connected.
+ *
+ * @param      sock   The pointer to the socket.
+ * @param      data   The pointer to the message.
+ * @param[in]  flags  The flags.
+ *
+ * @return     SUCCESS if sending is successiful, and SOCKET_SENDTO_FAILED when
+ *             error occures.
+ */
+RETCODE
+SocketSend(Socket* sock, Data* data, int flags);
+
+/**
+ * @brief      Receives a message via provided socket from specified address.
+ *
+ * @param      sock   The pointer to the socket.
+ * @param      data   The pointer to the buffer.
+ * @param      addr   The pointer to the address.
+ * @param[in]  flags  The flags.
+ *
+ * @return     SUCCESS if sending is successiful, and SOCKET_RECEIVEFROM_FAILED
+ *             when error occures.
+ */
+RETCODE
+SocketReceiveFrom(Socket* sock, Data* data, Address* addr, int flags);
+
+/**
+ * @brief      Receives a message via provided socket with specified flags.
+ *             Socket must be binded.
+ *
+ * @param      sock   The pointer to the socket.
+ * @param      data   The pointer to the buffer.
+ * @param[in]  flags  The flags.
+ *
+ * @return     SUCCESS if sending is successiful, and SOCKET_RECEIVEFROM_FAILED
+ *             when error occures.
+ */
+RETCODE
+SocketReceive(Socket* sock, Data* data, int flags);
