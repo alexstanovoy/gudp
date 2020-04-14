@@ -15,10 +15,8 @@
  *
  *             The structure of the header is following:
  *
- *             * 16-byte `flags` bit field for marking this packet as encrypted,
- * compressed, synchronization packet, etc.
- *             * 16-byte `client_num` for identificating client. Note that
- * currently `GUDP` checks IP and port of the client before processing too.
+ *             * 4-bit `packet_type` bit field for marking this packet as
+ * encrypted, compressed, synchronization packet, etc.
  *             * 16-byte `packet_id` for packet identificating. If the packet
  * was already processed (it's duplicate or broken) -- packet is skipped.
  *             * 16-byte `len` shows information about data length.
@@ -34,38 +32,67 @@
 #include "common/retcode.h"
 
 /**
- * @brief      A GUDP library packet header. See packet.h detailed
- *             description for more information.
+ * @brief      A pair of data array pointer and data length.
  */
-typedef struct gudp_packet_header_t {
-  uint16_t flags;
-  uint16_t client_num;
+typedef struct {
+  /// The pointer to the data.
+  char* ptr;
+  /// The data length.
+  size_t len;
+} Data;
+
+/**
+ * @brief      A GUDP library packet header.
+ */
+typedef struct {
+  uint16_t packet_type : 2;
+  uint16_t encryption_type : 2;
+  uint16_t compression_type : 2;
   uint16_t packet_id;
   uint16_t len;
   uint32_t ack;
 } PacketHeader;
 
 /**
- * @brief      A pair of data array pointer and data length.
+ * @brief      A GUDP library packet.
  */
-typedef struct gudp_data_t {
-  /// The pointer to the data.
-  void* data;
-  /// The data length.
-  size_t len;
-} Data;
+typedef struct {
+  /// The header.
+  PacketHeader header;
+  /// The packet.
+  Data data;
+} Packet;
 
-/**
- * @brief      Adds a GUDP packet header at the beginning of the RAW data and
- *             writes result to "out" operand.
- *
- * @param      in      The pointer to the RAW data to send.
- * @param      out     The pointer to the GUDP packet header.
- * @param      header  The GUDP packet header.
- *
- * @todo       Explain return values.
- *
- * @return     TODO.
- */
+typedef enum {
+  SYNC,
+  CONNECT,
+  OVERHEAD,
+  DISCONNECT,
+} ResponseType;
+
+typedef struct {
+  ResponseType response_type;
+  uint16_t client_id;
+  Data data;
+} Response;
+
 RETCODE
-MakePacket(Data* in, Data* out, PacketHeader* header);
+DataInit(Data* data);
+
+void DataDestroy(Data* data);
+
+RETCODE
+PacketInit(Packet* packet);
+
+void PacketDestroy(Packet* packet);
+
+RETCODE
+ResponseInit(Response* packet);
+
+void ResponseDestroy(Response* packet);
+
+RETCODE
+GetResponseFromData(Data* in, Response* out);
+
+RETCODE
+GetDataFromResponse(Response* in, Data* out);

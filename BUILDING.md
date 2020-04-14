@@ -13,6 +13,16 @@
 
 If you already have the dependencies installed, then you should be able to build fairly trivially.
 
+### Build options
+
+There are some options in `meson_options.txt`:
+
+| Name           | Type      | Values                         |
+|----------------|-----------|--------------------------------|
+| `enable-tests` | `boolean` | `true` - enables testing       |
+|                |           | `false` - disables testing     |
+| `domain-type`  | `combo`   | `ipv4` - compile ipv4 netcode  |
+
 ### Linux building
 
 ```

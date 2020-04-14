@@ -14,11 +14,11 @@
 /**
  * @brief      Client structure.
  */
-typedef struct gudp_client_t {
+typedef struct {
   /// Socket for connection.
-  Socket sock;
+  Socket* sock;
   /// Address of the server to which client is connected.
-  Address addr;
+  Address* addr;
   /// Last sent packet ID.
   uint16_t last_id;
   /// Ack bits for last 32 packets.

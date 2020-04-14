@@ -4,149 +4,153 @@
  * @brief      Provides structures and functions for conveniant,
  *             platform-independent socket creation, destroying and
  *             modification.
+ *
+ * @author     Alexander Stanovoy
  */
 
 #pragma once
 
-#include <stddef.h>
 #include <stdint.h>
 
 #include "common/retcode.h"
 #include "networking/packet.h"
 
-/**
- * @brief      A crossplatform structure that represents OS socket.
- */
 typedef struct gudp_socket_t Socket;
 
-/**
- * @brief      A structure that represents address. Can be IPv4 or IPv6
- *             depending on compile options.
- */
 typedef struct gudp_address_t Address;
 
-/**
- * @brief      A enumeration that stores flags for operations with sockets.
- *             Exact values are platform-dependent.
- */
-typedef enum gudp_socket_flags FLAG;
+#ifdef __IPV4__
+typedef struct gudp_address_t {
+  uint32_t ip;
+  uint16_t port;
+} Address;
+
+RETCODE
+AddressInit(Address* addr) {
+  return SUCCESS;
+}
+
+void AddressDestroy(Address* addr) {
+}
+#endif
+
+#ifdef __LINUX__
+typedef struct gudp_socket_t {
+  int socket_fd;
+} Socket;
+#endif
 
 /**
- * @brief      Initializes the sockets. Must be used before creating sockets.
+ * @brief      Initializes the sockets.
  *
  * @return     SUCCESS if initialization is successiful, and SOCKET_INIT_FAILURE
  *             when error occures.
+ *
+ * @since      0.0.1
+ *
+ * @note       Must be used before creating sockets on Windows only.
  */
 RETCODE
 SocketInit();
 
 /**
- * @brief      Shutdowns the sockets. Must be used after closing sockets.
+ * @brief      Shutdowns the sockets.
  *
  * @return     SUCCESS if shutdown is successiful, and SOCKET_CLEANUP_FAILURE
  *             when error occures.
+ *
+ * @since      0.0.1
+ *
+ * @note       Must be used after closing sockets on Windows only.
  */
 RETCODE
 SocketShutdown();
 
 /**
- * @brief      Creates a socket.
+ * @brief      Initializes a socket.
  *
- * @param      sock  The pointer to the socket.
+ * @param      socket  The pointer to the socket.
  *
- * @return     Socket file descriptor if creation is successiful, and
- *             SOCKET_CREATION_FAILED when error occures.
+ * @return     SUCCESS if initialization is successiful, and SOCKET_INIT_FAILED
+ *             if error occures.
+ *
+ * @since      0.0.1
  */
 RETCODE
-SocketCreate(Socket* sock);
+SocketInit(Socket* socket);
 
 /**
- * @brief      Closes the socket.
+ * @brief      Destroys the socket.
  *
- * @param      sock  The pointer to the socket.
+ * @param      socket  The pointer to the socket.
  *
- * @return     SUCCESS if closing is successiful, and SOCKET_CLOSING_FAILED when
- *             error occures.
+ * @since      0.0.1
+ *
+ * @note       It's guaranteed SocketDestroy() will work correctly after
+ *             unsuccessful SocketCreate().
  */
-RETCODE
-SocketClose(Socket* sock);
+void SocketDestroy(Socket* socket);
 
 /**
- * @brief      Bind the socket for listening.
+ * @brief      Binds the socket for listening.
  *
- * @param      sock  The pointer to the socket.
- * @param      addr  The address.
+ * @param      socket  The pointer to the socket.
+ * @param      addr    The pointer to the address.
  *
  * @return     SUCCESS if bind is successiful, and SOCKET_BIND_FAILED when error
  *             occures.
+ *
+ * @since      0.0.1
  */
 RETCODE
-SocketBind(Socket* sock, Address* addr);
+SocketBind(Socket* socket, Address* addr);
 
 /**
  * @brief      Connects a socket to the server.
  *
- * @param      sock  The pointer to the socket.
- * @param      addr  The address.
+ * @param      socket  The pointer to the socket.
+ * @param      addr    The pointer to the address.
  *
  * @return     SUCCESS if connect is successiful, and SOCKET_CONNECT_FAILED when
  *             error occures.
+ *
+ * @since      0.0.1
  */
 RETCODE
-SocketConnect(Socket* sock, Address* addr);
+SocketConnect(Socket* socket, Address* addr);
 
 /**
- * @brief      Sends message to the address via socket with specified flags.
+ * @brief      Sends a message via socket to provided address.
  *
- * @param      sock   The pointer to the socket.
- * @param      data   The pointer to the message.
- * @param      addr   The address.
- * @param[in]  flags  The flags.
+ * @param      socket  The pointer to the socket.
+ * @param      data    The pointer to the data to send.
+ * @param      addr    The pointer to the address.
  *
- * @return     SUCCESS if sending is successiful, and SOCKET_SENDTO_FAILED when
+ * @return     SUCCESS if send is successiful, and SOCKET_SEND_FAILED if error
+ *             occures.
+ *
+ * @since      0.0.1
+ *
+ * @note       When pointer to the address is NULL, function sends data to the
+ *             connected server.
+ */
+RETCODE
+SocketSend(Socket* socket, Data* data, Address* addr);
+
+/**
+ * @brief      Receives a message via socket and saves address of sender to
+ *             provided address structure.
+ *
+ * @param      socket  The pointer to the socket.
+ * @param      buffer  The pointer to the buffer.
+ * @param      addr    The pointer to the address.
+ *
+ * @return     SUCCESS if receive successiful, and SOCKET_RECEIVE_FAILED if
  *             error occures.
+ *
+ * @since      0.0.1
+ *
+ * @note       When pointer to address is NULL, function won't save address.
  */
 RETCODE
-SocketSendTo(Socket* sock, Data* data, Address* addr, int flags);
-
-/**
- * @brief      Sends message via socket with specified flags. Socket must be
- *             connected.
- *
- * @param      sock   The pointer to the socket.
- * @param      data   The pointer to the message.
- * @param[in]  flags  The flags.
- *
- * @return     SUCCESS if sending is successiful, and SOCKET_SENDTO_FAILED when
- *             error occures.
- */
-RETCODE
-SocketSend(Socket* sock, Data* data, int flags);
-
-/**
- * @brief      Receives a message via provided socket from specified address.
- *
- * @param      sock   The pointer to the socket.
- * @param      data   The pointer to the buffer.
- * @param      addr   The pointer to the address.
- * @param[in]  flags  The flags.
- *
- * @return     SUCCESS if sending is successiful, and SOCKET_RECEIVEFROM_FAILED
- *             when error occures.
- */
-RETCODE
-SocketReceiveFrom(Socket* sock, Data* data, Address* addr, int flags);
-
-/**
- * @brief      Receives a message via provided socket with specified flags.
- *             Socket must be binded.
- *
- * @param      sock   The pointer to the socket.
- * @param      data   The pointer to the buffer.
- * @param[in]  flags  The flags.
- *
- * @return     SUCCESS if sending is successiful, and SOCKET_RECEIVEFROM_FAILED
- *             when error occures.
- */
-RETCODE
-SocketReceive(Socket* sock, Data* data, int flags);
+SocketReceive(Socket* socket, Data* buffer, Address* addr);
