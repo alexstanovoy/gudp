@@ -25,4 +25,6 @@ typedef enum {
   /// General error; malloc failed.
   NOT_ENOUGH_MEMORY,
   SERVER_USER_NOT_FOUND,
+  SERVER_CROWDED,
+  CLIENT_KICKED,
 } RETCODE;

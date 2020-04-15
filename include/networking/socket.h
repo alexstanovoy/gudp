@@ -15,12 +15,8 @@
 #include "common/retcode.h"
 #include "networking/packet.h"
 
-typedef struct gudp_socket_t Socket;
-
-typedef struct gudp_address_t Address;
-
 #ifdef __IPV4__
-typedef struct gudp_address_t {
+typedef struct {
   uint32_t ip;
   uint16_t port;
 } Address;
@@ -35,7 +31,7 @@ void AddressDestroy(Address* addr) {
 #endif
 
 #ifdef __LINUX__
-typedef struct gudp_socket_t {
+typedef struct {
   int socket_fd;
 } Socket;
 #endif
