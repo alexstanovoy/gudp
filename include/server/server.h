@@ -2,8 +2,8 @@
 
 #include "common/retcode.h"
 #include "networking/packet.h"
-#include "server/server_struct.h"
 #include "server/server_registrator.h"
+#include "server/server_struct.h"
 
 const int kBaseClients = 65535;
 

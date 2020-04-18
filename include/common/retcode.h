@@ -22,7 +22,8 @@ typedef enum {
   SOCKET_SEND,
   /// SocketReceive() error; Receive failed.
   SOCKET_RECEIVE,
-  /// SocketReceive() error; Returned after timeout reached. See SocketSetTimeout() for details.
+  /// SocketReceive() error; Returned after timeout reached. See
+  /// SocketSetTimeout() for details.
   SOCKET_TIMEOUT,
   /// SocketSetTimeout() error; Setting failed.
   SOCKET_SETTIMEOUT,

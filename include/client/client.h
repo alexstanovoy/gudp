@@ -20,3 +20,6 @@ ClientReceive(Client* client, Response* response);
 
 RETCODE
 ClientSend(Client* client, Response* response);
+
+RETCODE
+ClientSetTimeout(Client* clt, time_t milliseconds);

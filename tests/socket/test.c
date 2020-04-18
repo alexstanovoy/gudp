@@ -1,9 +1,9 @@
-#include <string.h>
 #include <assert.h>
+#include <string.h>
 
-#include "panic.h"
-#include "networking/socket.h"
 #include "networking/packet.h"
+#include "networking/socket.h"
+#include "panic.h"
 
 const char kLocalHost[] = "127.0.0.1";
 const char kTestPacket[] = "hello world!";

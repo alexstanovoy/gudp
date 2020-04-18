@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "common/retcode.h"
 
 void Throw(char* msg, int line) {
@@ -10,7 +11,7 @@ void Throw(char* msg, int line) {
 }
 
 #define ThrowThis(errline) \
-  Throw((errline), line); \
+  Throw((errline), line);  \
   break;
 
 void TryThrow(RETCODE result, int line) {
@@ -43,7 +44,9 @@ void TryThrow(RETCODE result, int line) {
       ThrowThis("SocketReceive() error; Receive failed.");
     }
     case SOCKET_TIMEOUT: {
-      ThrowThis("SocketReceive() error; Returned after timeout reached. See SocketSetTimeout() for details.");
+      ThrowThis(
+          "SocketReceive() error; Returned after timeout reached. See "
+          "SocketSetTimeout() for details.");
     }
     case SOCKET_SETTIMEOUT: {
       ThrowThis("SocketSetTimeout() error; Setting failed.");
@@ -52,7 +55,9 @@ void TryThrow(RETCODE result, int line) {
       ThrowThis("Server cannot find specified user id.");
     }
     case SERVER_CROWDED: {
-      ThrowThis("Server tried to accept connection but there were no place in server.");
+      ThrowThis(
+          "Server tried to accept connection but there were no place in "
+          "server.");
     }
     case CLIENT_KICKED: {
       ThrowThis("Client received disconnect packet while in action.");

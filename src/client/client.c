@@ -51,3 +51,9 @@ ClientSend(Client* client, Response* response) {
   THROW_OR_CONTINUE(SocketSend(&client->socket, &data, &client->addr))
   return SUCCESS;
 }
+
+RETCODE
+ClientSetTimeout(Client* clt, time_t milliseconds) {
+  THROW_OR_CONTINUE(SocketSetTimeout(&clt->socket, milliseconds));
+  return SUCCESS;
+}
