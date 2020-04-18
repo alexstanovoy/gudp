@@ -1,3 +1,12 @@
+/**
+ * @file macro.h
+ *
+ * @brief      Provides defines for using inside library. These macro shorten
+ *             the code and make it easier to read.
+ *
+ * @author     Alexander Stanovoy
+ */
+
 #pragma once
 
 #include "common/retcode.h"
@@ -7,7 +16,7 @@
  *
  * @param      func  The function to execute.
  *
- * @return     void.
+ * @since      0.0.1
  */
 #define THROW_OR_CONTINUE(func) \
   {                             \
@@ -17,4 +26,11 @@
     };                          \
   }
 
+/**
+ * @brief      Macro for setting up the **RAII** pattern for data structure.
+ *
+ * @param      destructor  The destructor for structure.
+ *
+ * @since      0.0.1
+ */
 #define RAII(destructor) __attribute__((cleanup(destructor)))

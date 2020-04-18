@@ -36,7 +36,7 @@ ClientReceive(Client* client, Response* response) {
   THROW_OR_CONTINUE(DataInit(&data));
   THROW_OR_CONTINUE(SocketReceive(&client->socket, &data, NULL));
   THROW_OR_CONTINUE(DataToResponse(&data, response));
-  if (response->type == DISCONNECT) {
+  if (ResponseGetType(response) == DISCONNECT) {
     return CLIENT_KICKED;
   }
   return SUCCESS;
@@ -46,14 +46,14 @@ RETCODE
 ClientSend(Client* client, Response* response) {
   RAII(DataDestroy) Data data;
   THROW_OR_CONTINUE(DataInit(&data));
-  response->type = CONNECT;
+  ResponseSetType(response, CONNECT);
   THROW_OR_CONTINUE(ResponseToData(response, &data));
   THROW_OR_CONTINUE(SocketSend(&client->socket, &data, &client->addr))
   return SUCCESS;
 }
 
 RETCODE
-ClientSetTimeout(Client* clt, time_t milliseconds) {
+ClientSetTimeout(Client* client, time_t milliseconds) {
   THROW_OR_CONTINUE(SocketSetTimeout(&clt->socket, milliseconds));
   return SUCCESS;
 }

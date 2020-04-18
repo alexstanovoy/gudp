@@ -17,15 +17,13 @@ Address addr;
 Data data;
 
 int main() {
+  Panic(SocketInit(&sock1));
+  Panic(SocketInit(&sock2));
 #ifdef __IPV4__
   Panic(AddressInit(&addr, kLocalHost, kPort));
 #else
 #error "Unsupported netcode"
 #endif
-
-  Panic(SocketsStartup());
-  Panic(SocketInit(&sock1));
-  Panic(SocketInit(&sock2));
   Panic(DataInit(&data));
 
   Panic(SocketBind(&sock1, &addr));
@@ -48,5 +46,4 @@ int main() {
   SocketDestroy(&sock2);
   AddressDestroy(&addr);
   DataDestroy(&data);
-  Panic(SocketsShutdown());
 }

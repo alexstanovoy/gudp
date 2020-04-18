@@ -1,3 +1,11 @@
+/**
+ * @file retcode.h
+ *
+ * @brief      Contains enum with GUDP return codes.
+ *
+ * @author     Alexander Stanovoy
+ */
+
 #pragma once
 
 /**
@@ -8,7 +16,7 @@ typedef enum {
   SUCCESS = 0,
   /// General error; malloc() failed.
   NOT_ENOUGH_MEMORY,
-  /// SocketStartup() error; WSAStartup() != NO_ERROR.
+  /// SocketsStartup() error; WSAStartup() != NO_ERROR.
   SOCKET_STARTUP,
   /// SocketsShutdown() error; WSACleanup() != NO_ERROR.
   SOCKET_SHUTDOWN,

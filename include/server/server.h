@@ -1,3 +1,11 @@
+/**
+ * @file server.h
+ *
+ * @brief      Contains structure and interface for server interaction.
+ *
+ * @author     Alexander Stanovoy
+ */
+
 #pragma once
 
 #include "common/retcode.h"

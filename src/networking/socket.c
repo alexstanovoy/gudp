@@ -1,3 +1,11 @@
+/**
+ * @file socket.с
+ *
+ * @brief      Contains implementation of interface described in socket.h file.
+ *
+ * @author     Alexander Stanovoy
+ */
+
 #include "networking/socket.h"
 
 #include <errno.h>
@@ -7,6 +15,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "common/macro.h"
 #include "common/retcode.h"
 
 static const int kSocketDomain = AF_INET;
@@ -45,6 +54,7 @@ SocketsShutdown() {
 
 RETCODE
 SocketInit(Socket* sock) {
+  THROW_OR_CONTINUE(SocketsStartup());
   sock->socket_fd = socket(kSocketDomain, kSocketType, kSocketProtocol);
   if (sock->socket_fd < 0) {
     return SOCKET_INIT;
@@ -56,18 +66,15 @@ void SocketDestroy(Socket* sock) {
   if (sock->socket_fd != -1) {
     close(sock->socket_fd);
   }
-}
-
-static void AddressToSockaddrIn(struct sockaddr_in* result, Address* addr) {
-  *result = (struct sockaddr_in){.sin_family = kSocketDomain,
-                                 .sin_addr = addr->ip,
-                                 .sin_port = addr->port};
+  THROW_OR_CONTINUE(SocketsShutdown());
 }
 
 RETCODE
 SocketBind(Socket* sock, Address* addr) {
-  struct sockaddr_in bind_addr;
-  AddressToSockaddrIn(&bind_addr, addr);
+  struct sockaddr_in bind_addr =
+      (struct sockaddr_in){.sin_family = kSocketDomain,
+                           .sin_addr = addr->ip,
+                           .sin_port = addr->port};
   if (bind(sock->socket_fd, (const struct sockaddr*)&bind_addr,
            sizeof(struct sockaddr_in)) < 0) {
     return SOCKET_BIND;
@@ -77,8 +84,10 @@ SocketBind(Socket* sock, Address* addr) {
 
 RETCODE
 SocketConnect(Socket* sock, Address* addr) {
-  struct sockaddr_in connect_addr;
-  AddressToSockaddrIn(&connect_addr, addr);
+  struct sockaddr_in connect_addr =
+      (struct sockaddr_in){.sin_family = kSocketDomain,
+                           .sin_addr = addr->ip,
+                           .sin_port = addr->port};
   if (connect(sock->socket_fd, (const struct sockaddr*)&connect_addr,
               sizeof(struct sockaddr_in)) < 0) {
     return SOCKET_CONNECT;
@@ -94,8 +103,10 @@ SocketSend(Socket* sock, Data* data, Address* addr) {
     }
     return SUCCESS;
   }
-  struct sockaddr_in client_addr;
-  AddressToSockaddrIn(&client_addr, addr);
+  struct sockaddr_in client_addr =
+      (struct sockaddr_in){.sin_family = kSocketDomain,
+                           .sin_addr = addr->ip,
+                           .sin_port = addr->port};
   if (sendto(sock->socket_fd, data->ptr, data->len, 0,
              (const struct sockaddr*)&client_addr,
              sizeof(struct sockaddr_in)) < 0) {

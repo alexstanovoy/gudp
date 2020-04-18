@@ -19,9 +19,9 @@ void DataDestroy(Data* data) {
   free(data->ptr);
 }
 
-void DataSet(Data* data, const char* msg) {
-  size_t len = strlen(msg);
-  strncpy(data->ptr, msg, len);
+void DataSet(Data* data, const char* str) {
+  size_t len = strlen(str);
+  strncpy(data->ptr, str, len);
   data->len = len;
 }
 
@@ -35,9 +35,9 @@ void ResponseDestroy(Response* response) {
   DataDestroy(&response->data);
 }
 
-void ResponseSetData(Response* response, const char* msg) {
-  size_t len = strlen(msg);
-  strncpy(response->data.ptr, msg, len);
+void ResponseSetData(Response* response, const char* str) {
+  size_t len = strlen(str);
+  strncpy(response->data.ptr, str, len);
   response->data.len = len;
 }
 
