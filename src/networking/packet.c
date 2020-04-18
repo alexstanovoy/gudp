@@ -19,6 +19,12 @@ void DataDestroy(Data* data) {
   free(data->ptr);
 }
 
+void DataSet(Data* data, const char* msg) {
+  size_t len = strlen(msg);
+  strncpy(data->ptr, msg, len);
+  data->len = len;
+}
+
 RETCODE
 ResponseInit(Response* response) {
   THROW_OR_CONTINUE(DataInit(&response->data));
@@ -27,6 +33,12 @@ ResponseInit(Response* response) {
 
 void ResponseDestroy(Response* response) {
   DataDestroy(&response->data);
+}
+
+void ResponseSetData(Response* response, const char* msg) {
+  size_t len = strlen(msg);
+  strncpy(response->data.ptr, msg, len);
+  response->data.len = len;
 }
 
 void ResponseSetType(Response* response, ResponseType type) {
@@ -46,17 +58,17 @@ uint16_t ResponseGetClientId(Response* response) {
 }
 
 RETCODE
-GetResponseFromData(Data* in, Response* out) {
-  ResponseSetType(out, ((PacketHeader*)in)->type);
-  memcpy(out->data.ptr, in->ptr + sizeof(PacketHeader),
-         ((PacketHeader*)in)->len);
+DataToResponse(Data* in, Response* out) {
+  memcpy(&out->type, &((PacketHeader*)in->ptr)->type, sizeof(ResponseType));
+  memcpy(&out->data.len, &((PacketHeader*)in->ptr)->len, sizeof(uint16_t));
+  memcpy(out->data.ptr, in->ptr + sizeof(PacketHeader), out->data.len);
   return SUCCESS;
 }
 
 RETCODE
-GetDataFromResponse(Response* in, Data* out) {
-  ((PacketHeader*)out)->type = in->type;
-  ((PacketHeader*)out)->len = in->data.len;
-  memcpy(out->ptr, in->data.ptr, in->data.len);
+ResponseToData(Response* in, Data* out) {
+  ((PacketHeader*)out->ptr)->type = in->type;
+  ((PacketHeader*)out->ptr)->len = in->data.len;
+  memcpy(out->ptr + sizeof(PacketHeader), in->data.ptr, in->data.len);
   return SUCCESS;
 }

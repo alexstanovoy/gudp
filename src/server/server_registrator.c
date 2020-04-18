@@ -9,7 +9,7 @@
 
 RETCODE
 ConnectedClientInit(ConnectedClient* client) {
-  THROW_OR_CONTINUE(AddressInit(&client->addr));
+  THROW_OR_CONTINUE(AddressInit(&client->addr, NULL, 0));
   client->exist = 1;
   return SUCCESS;
 }
@@ -21,7 +21,7 @@ void ConnectedClientDestroy(ConnectedClient* client) {
 
 RETCODE
 ServerRegistratorInit(Server* srv) {
-  srv->clients = malloc(kBaseClients * sizeof(ConnectedClient));
+  srv->clients = calloc(kBaseClients, sizeof(ConnectedClient));
   if (srv->clients == NULL) {
     return NOT_ENOUGH_MEMORY;
   }
@@ -33,8 +33,8 @@ void ServerRegistratorDestroy(Server* srv) {
 }
 
 RETCODE
-ServerRegistratorIsUserExist(Server* srv, Address* addr,
-                             ConnectedClient** client) {
+ServerRegistratorGetUserByAddress(Server* srv, Address* addr,
+                                  ConnectedClient** client) {
   for (uint16_t id = 0; id < kBaseClients; ++id) {
     if (srv->clients[id].exist &&
         memcmp(&srv->clients[id].addr, addr, sizeof(Address)) == 0) {
@@ -58,9 +58,10 @@ ServerRegistratorGetUserByID(Server* srv, uint16_t client_id,
 RETCODE
 ServerRegistratorAddUser(Server* srv, Address* addr, ConnectedClient** client) {
   for (uint16_t id = 0; id < kBaseClients; ++id) {
-    if (!srv->clients[id].exist) {
+    if (srv->clients[id].exist == 0) {
       THROW_OR_CONTINUE(ConnectedClientInit(&srv->clients[id]));
       memcpy(&srv->clients[id].addr, addr, sizeof(Address));
+      srv->clients[id].client_id = id;
       *client = &srv->clients[id];
       return SUCCESS;
     }
@@ -68,7 +69,7 @@ ServerRegistratorAddUser(Server* srv, Address* addr, ConnectedClient** client) {
   return SERVER_CROWDED;
 }
 
-void ServerRegistratorRemoveUser(Server* srv, Address* addr) {
+void ServerRegistratorRemoveUserByAddress(Server* srv, Address* addr) {
   for (uint16_t id = 0; id < kBaseClients; ++id) {
     if (memcmp(&srv->clients[id].addr, addr, sizeof(Address)) == 0) {
       ConnectedClientDestroy(&srv->clients[id]);

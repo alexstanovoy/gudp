@@ -48,6 +48,7 @@ add_project_arguments(defines, language: 'c')
 subdir('src')
 
 if get_option('enable-tests')
+  inc += include_directories('tests')
   subdir('tests')
 endif
 

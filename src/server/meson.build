@@ -3,6 +3,7 @@ project_sources += server_registrator
 server_registrator_lib = library(
   'server_registrator',
   server_registrator,
+  link_with: socket_lib,
   include_directories : inc
 )
 

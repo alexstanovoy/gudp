@@ -8,7 +8,7 @@
 const size_t kDataLength = 500;
 
 typedef struct {
-  void* ptr;
+  char* ptr;
   size_t len;
 } Data;
 
@@ -33,10 +33,14 @@ DataInit(Data* data);
 
 void DataDestroy(Data* data);
 
+void DataSet(Data* data, const char* msg);
+
 RETCODE
 ResponseInit(Response* response);
 
 void ResponseDestroy(Response* response);
+
+void ResponseSetData(Response* response, const char* msg);
 
 void ResponseSetType(Response* response, ResponseType type);
 
@@ -47,7 +51,7 @@ void ResponseSetClientId(Response* response, uint16_t client_id);
 uint16_t ResponseGetClientId(Response* response);
 
 RETCODE
-GetResponseFromData(Data* in, Response* out);
+DataToResponse(Data* in, Response* out);
 
 RETCODE
-GetDataFromResponse(Response* in, Data* out);
+ResponseToData(Response* in, Data* out);

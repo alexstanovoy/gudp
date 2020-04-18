@@ -1,6 +1,7 @@
+#include "client/client.h"
+
 #include <string.h>
 
-#include "client/client.h"
 #include "common/macro.h"
 #include "common/retcode.h"
 #include "networking/packet.h"
@@ -9,13 +10,13 @@
 RETCODE
 ClientInit(Client* client, Address* addr) {
   THROW_OR_CONTINUE(SocketInit(&client->socket));
-  RETCODE result = AddressInit(&client->addr);
+  RETCODE result = AddressInit(&client->addr, NULL, 0);
   if (result != SUCCESS) {
     SocketDestroy(&client->socket);
     return result;
   }
-  memcpy(&client->addr, addr, sizeof(Address));
-  result = SocketBind(&client->socket, &client->addr);
+  AddressCopy(&client->addr, addr);
+  result = SocketConnect(&client->socket, &client->addr);
   if (result != SUCCESS) {
     SocketDestroy(&client->socket);
     AddressDestroy(&client->addr);
@@ -24,8 +25,7 @@ ClientInit(Client* client, Address* addr) {
   return SUCCESS;
 }
 
-void
-ClientDestroy(Client* client) {
+void ClientDestroy(Client* client) {
   SocketDestroy(&client->socket);
   AddressDestroy(&client->addr);
 }
@@ -35,7 +35,7 @@ ClientReceive(Client* client, Response* response) {
   RAII(DataDestroy) Data data;
   THROW_OR_CONTINUE(DataInit(&data));
   THROW_OR_CONTINUE(SocketReceive(&client->socket, &data, NULL));
-  THROW_OR_CONTINUE(GetResponseFromData(&data, response));
+  THROW_OR_CONTINUE(DataToResponse(&data, response));
   if (response->type == DISCONNECT) {
     return CLIENT_KICKED;
   }
@@ -46,7 +46,8 @@ RETCODE
 ClientSend(Client* client, Response* response) {
   RAII(DataDestroy) Data data;
   THROW_OR_CONTINUE(DataInit(&data));
-  THROW_OR_CONTINUE(GetDataFromResponse(response, &data));
+  response->type = CONNECT;
+  THROW_OR_CONTINUE(ResponseToData(response, &data));
   THROW_OR_CONTINUE(SocketSend(&client->socket, &data, &client->addr))
   return SUCCESS;
 }

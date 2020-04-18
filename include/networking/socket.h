@@ -1,8 +1,8 @@
 /**
- * @file socket.h
+ * @file sock.h
  *
  * @brief      Provides structures and functions for conveniant,
- *             platform-independent socket creation, destroying and
+ *             platform-independent sock creation, destroying and
  *             modification.
  *
  * @author     Alexander Stanovoy
@@ -11,33 +11,41 @@
 #pragma once
 
 #include <stdint.h>
+#include <string.h>
 
 #include "common/retcode.h"
 #include "networking/packet.h"
 
+#ifdef __LINUX__
+#include <arpa/inet.h>
+
+typedef struct {
+  int socket_fd;
+} Socket;
+#else
+#error "Unsupported platform"
+#endif
+
 #ifdef __IPV4__
+
 typedef struct {
   uint32_t ip;
   uint16_t port;
 } Address;
 
 RETCODE
-AddressInit(Address* addr) {
-  return SUCCESS;
-}
+AddressInit(Address* addr, const char* ip, uint16_t port);
 
-void AddressDestroy(Address* addr) {
-}
-#endif
+void AddressDestroy(Address* addr);
 
-#ifdef __LINUX__
-typedef struct {
-  int socket_fd;
-} Socket;
+void AddressCopy(Address* dest, Address* src);
+
+#else
+#error "Unsupported type of netcode"
 #endif
 
 /**
- * @brief      Initializes the sockets.
+ * @brief      Startups the sockets.
  *
  * @return     SUCCESS if initialization is successiful, and SOCKET_INIT_FAILURE
  *             when error occures.
@@ -47,7 +55,7 @@ typedef struct {
  * @note       Must be used before creating sockets on Windows only.
  */
 RETCODE
-SocketInit();
+SocketsStartup();
 
 /**
  * @brief      Shutdowns the sockets.
@@ -60,12 +68,12 @@ SocketInit();
  * @note       Must be used after closing sockets on Windows only.
  */
 RETCODE
-SocketShutdown();
+SocketsShutdown();
 
 /**
- * @brief      Initializes a socket.
+ * @brief      Initializes a sock.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  *
  * @return     SUCCESS if initialization is successiful, and SOCKET_INIT_FAILED
  *             if error occures.
@@ -73,24 +81,24 @@ SocketShutdown();
  * @since      0.0.1
  */
 RETCODE
-SocketInit(Socket* socket);
+SocketInit(Socket* sock);
 
 /**
- * @brief      Destroys the socket.
+ * @brief      Destroys the sock.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  *
  * @since      0.0.1
  *
  * @note       It's guaranteed SocketDestroy() will work correctly after
  *             unsuccessful SocketCreate().
  */
-void SocketDestroy(Socket* socket);
+void SocketDestroy(Socket* sock);
 
 /**
- * @brief      Binds the socket for listening.
+ * @brief      Binds the sock for listening.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  * @param      addr    The pointer to the address.
  *
  * @return     SUCCESS if bind is successiful, and SOCKET_BIND_FAILED when error
@@ -99,12 +107,12 @@ void SocketDestroy(Socket* socket);
  * @since      0.0.1
  */
 RETCODE
-SocketBind(Socket* socket, Address* addr);
+SocketBind(Socket* sock, Address* addr);
 
 /**
- * @brief      Connects a socket to the server.
+ * @brief      Connects a sock to the server.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  * @param      addr    The pointer to the address.
  *
  * @return     SUCCESS if connect is successiful, and SOCKET_CONNECT_FAILED when
@@ -113,12 +121,12 @@ SocketBind(Socket* socket, Address* addr);
  * @since      0.0.1
  */
 RETCODE
-SocketConnect(Socket* socket, Address* addr);
+SocketConnect(Socket* sock, Address* addr);
 
 /**
- * @brief      Sends a message via socket to provided address.
+ * @brief      Sends a message via sock to provided address.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  * @param      data    The pointer to the data to send.
  * @param      addr    The pointer to the address.
  *
@@ -131,13 +139,13 @@ SocketConnect(Socket* socket, Address* addr);
  *             connected server.
  */
 RETCODE
-SocketSend(Socket* socket, Data* data, Address* addr);
+SocketSend(Socket* sock, Data* data, Address* addr);
 
 /**
- * @brief      Receives a message via socket and saves address of sender to
+ * @brief      Receives a message via sock and saves address of sender to
  *             provided address structure.
  *
- * @param      socket  The pointer to the socket.
+ * @param      sock  The pointer to the sock.
  * @param      buffer  The pointer to the buffer.
  * @param      addr    The pointer to the address.
  *
@@ -149,4 +157,7 @@ SocketSend(Socket* socket, Data* data, Address* addr);
  * @note       When pointer to address is NULL, function won't save address.
  */
 RETCODE
-SocketReceive(Socket* socket, Data* buffer, Address* addr);
+SocketReceive(Socket* sock, Data* buffer, Address* addr);
+
+RETCODE
+SocketSetTimeout(Socket* sock, time_t milliseconds);
