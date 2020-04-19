@@ -29,7 +29,7 @@ typedef struct {
  * @param      client  The pointer to the client.
  * @param      addr    The pointer to the structure with server address.
  *
- * @return     SUCCESS whe initialization is succesiful, or traceback of the
+ * @return     SUCCESS when initialization is succesiful, or traceback of the
  *             following functions:
  *             - SocketInit()
  *             - AddressInit()
@@ -46,6 +46,9 @@ ClientInit(Client* client, Address* addr);
  * @param      client  The pointer to the client.
  *
  * @since      0.0.1
+ *
+ * @note       It's guaranteed ClientDestroy() will work correctly after
+ *             unsuccessful ClientInit().
  */
 void ClientDestroy(Client* client);
 
@@ -90,7 +93,7 @@ ClientSend(Client* client, Response* response);
  * @param[in]  milliseconds  The milliseconds to wait.
  *
  * @return     Traceback of SocketSetTimeout() function.
- * 
+ *
  * @since      0.0.1
  */
 RETCODE

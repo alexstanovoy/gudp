@@ -96,7 +96,7 @@ SocketInit(Socket* sock);
  * @since      0.0.1
  *
  * @note       It's guaranteed SocketDestroy() will work correctly after
- *             unsuccessful SocketCreate().
+ *             unsuccessful SocketInit().
  */
 void SocketDestroy(Socket* sock);
 

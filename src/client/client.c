@@ -54,6 +54,6 @@ ClientSend(Client* client, Response* response) {
 
 RETCODE
 ClientSetTimeout(Client* client, time_t milliseconds) {
-  THROW_OR_CONTINUE(SocketSetTimeout(&clt->socket, milliseconds));
+  THROW_OR_CONTINUE(SocketSetTimeout(&client->socket, milliseconds));
   return SUCCESS;
 }

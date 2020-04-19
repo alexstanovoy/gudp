@@ -63,6 +63,8 @@ int main() {
 
   ResponseSetData(&response, kTestPacket);
   Panic(ServerSend(&srv, &response));
+  puts("hooray");
+  fflush(stdout);
   ResponseSetData(&response, kTrashPacket);
   Panic(ClientReceive(&clt1, &response));
   assert(strncmp(response.data.ptr, kTestPacket, strlen(kTestPacket)) == 0);
