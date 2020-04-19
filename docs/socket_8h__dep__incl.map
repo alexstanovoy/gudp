@@ -1,0 +1,6 @@
+<map id="socket.h" name="socket.h">
+<area shape="rect" id="node1" title="Provides structures and functions for convenient, platform&#45;independent socket creation,..." alt="" coords="57,5,133,32"/>
+<area shape="rect" id="node2" href="$client_8h.html" title="Contains structure and interface for client interaction." alt="" coords="5,80,76,107"/>
+<area shape="rect" id="node3" href="$registrator_8h.html" title="Contains structures and interface for server registrator. It&#39;s the data structure that link the Addre..." alt="" coords="101,80,202,107"/>
+<area shape="rect" id="node4" href="$server_8h.html" title="Contains structure and interface for server interaction." alt="" coords="114,155,189,181"/>
+</map>

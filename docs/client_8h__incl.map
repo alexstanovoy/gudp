@@ -1,0 +1,9 @@
+<map id="client.h" name="client.h">
+<area shape="rect" id="node1" title="Contains structure and interface for client interaction." alt="" coords="64,5,135,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,229,76,256"/>
+<area shape="rect" id="node3" href="$packet_8h.html" title="Contains functions for working with packets that GUDP library instances (Server and Client) send and ..." alt="" coords="79,155,234,181"/>
+<area shape="rect" id="node6" href="$socket_8h.html" title="Provides structures and functions for convenient, platform&#45;independent socket creation,..." alt="" coords="137,80,291,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="101,229,175,256"/>
+<area shape="rect" id="node5" href="$retcode_8h.html" title="Contains enum with GUDP return codes." alt="" coords="199,229,343,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="309,155,380,181"/>
+</map>

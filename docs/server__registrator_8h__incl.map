@@ -1,0 +1,10 @@
+<map id="server_registrator.h" name="server_registrator.h">
+<area shape="rect" id="node1" title=" " alt="" coords="19,5,168,32"/>
+<area shape="rect" id="node2" href="$retcode_8h.html" title="Contains enum with GUDP return codes." alt="" coords="59,304,203,331"/>
+<area shape="rect" id="node3" href="$socket_8h.html" title="Provides structures and functions for convenient, platform&#45;independent socket creation,..." alt="" coords="101,155,254,181"/>
+<area shape="rect" id="node8" href="$server__struct_8h.html" title=" " alt="" coords="131,80,295,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="335,304,406,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="33,229,103,256"/>
+<area shape="rect" id="node6" href="$packet_8h.html" title="Contains functions for working with packets that GUDP library instances (Server and Client) send and ..." alt="" coords="179,229,333,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="227,304,301,331"/>
+</map>

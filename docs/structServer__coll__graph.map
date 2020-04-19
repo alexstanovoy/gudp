@@ -1,0 +1,5 @@
+<map id="Server" name="Server">
+<area shape="rect" id="node1" title="The server structure." alt="" coords="38,184,102,211"/>
+<area shape="rect" id="node2" href="$structRegistrator.html" title="Registrator structure." alt="" coords="23,95,117,121"/>
+<area shape="rect" id="node3" href="$structConnectedClient.html" title="The structure to represent connected client." alt="" coords="5,5,135,32"/>
+</map>

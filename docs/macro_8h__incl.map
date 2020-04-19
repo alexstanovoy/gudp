@@ -1,0 +1,4 @@
+<map id="macro.h" name="macro.h">
+<area shape="rect" id="node1" title="Provides defines for using inside library. These macro shorten the code and make it easier to read." alt="" coords="40,5,115,32"/>
+<area shape="rect" id="node2" href="$retcode_8h.html" title="Contains enum with GUDP return codes." alt="" coords="5,80,149,107"/>
+</map>

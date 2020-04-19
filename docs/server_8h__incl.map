@@ -1,0 +1,10 @@
+<map id="server.h" name="server.h">
+<area shape="rect" id="node1" title="Contains structure and interface for server interaction." alt="" coords="101,5,176,32"/>
+<area shape="rect" id="node2" href="$retcode_8h.html" title="Contains enum with GUDP return codes." alt="" coords="5,304,149,331"/>
+<area shape="rect" id="node3" href="$packet_8h.html" title="Contains functions for working with packets that GUDP library instances (Server and Client) send and ..." alt="" coords="287,229,441,256"/>
+<area shape="rect" id="node6" href="$registrator_8h.html" title="Contains structures and interface for server registrator. It&#39;s the data structure that link the Addre..." alt="" coords="65,80,212,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="327,304,401,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="203,304,274,331"/>
+<area shape="rect" id="node7" href="$socket_8h.html" title="Provides structures and functions for convenient, platform&#45;independent socket creation,..." alt="" coords="90,155,243,181"/>
+<area shape="rect" id="node8" title=" " alt="" coords="191,229,262,256"/>
+</map>

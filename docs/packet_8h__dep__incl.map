@@ -1,0 +1,7 @@
+<map id="packet.h" name="packet.h">
+<area shape="rect" id="node1" title="Contains functions for working with packets that GUDP library instances (Server and Client) send and ..." alt="" coords="95,5,173,32"/>
+<area shape="rect" id="node2" href="$client_8h.html" title="Contains structure and interface for client interaction." alt="" coords="5,155,76,181"/>
+<area shape="rect" id="node3" href="$socket_8h.html" title="Provides structures and functions for convenient, platform&#45;independent socket creation,..." alt="" coords="96,80,172,107"/>
+<area shape="rect" id="node5" href="$server_8h.html" title="Contains structure and interface for server interaction." alt="" coords="158,229,233,256"/>
+<area shape="rect" id="node4" href="$registrator_8h.html" title="Contains structures and interface for server registrator. It&#39;s the data structure that link the Addre..." alt="" coords="101,155,202,181"/>
+</map>
