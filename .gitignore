@@ -1,7 +1,4 @@
-docs/*
 build/*
 REPORT.md.backup
 README.md.backup
 BUILDING.md.backup
-
-!docs/doxycfg/
