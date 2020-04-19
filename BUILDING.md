@@ -10,7 +10,6 @@
 * GraphViz 2.40.1 or later.
 * Clang Format 8 or later.
 * Clang Tidy 8 or later.
-* GCovr 4.2-2 or later.
 
 If you already have the dependencies installed, then you should be able to build fairly trivially.
 
