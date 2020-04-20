@@ -38,4 +38,9 @@ script:
   - ninja coverage
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -f build/meson-logs/coverage.xml
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
+  - git add docs
+  - git commit -m "Travis build - $TRAVIS_BUILD_NUMBER"
+  - git remote add origin-pages https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} > /dev/null 2>&1
+  - git push origin-master

@@ -1,14 +1,13 @@
 registrator = files('registrator.c')
-project_sources += registrator
 registrator_lib = library(
   'registrator',
   registrator,
   link_with: socket_lib,
   include_directories : inc
 )
+libs += registrator_lib
 
 server = files('server.c')
-project_sources += server
 server_lib = library(
   'server',
   server,
@@ -19,4 +18,4 @@ server_lib = library(
   ],
   include_directories : inc
 )
-
+libs += server_lib

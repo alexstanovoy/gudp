@@ -17,16 +17,6 @@ if target_os == 'linux'
     '-D__LINUX__',
     '-D__PLATFORM__=\"linux\"'
   ]
-#elif target_os == 'windows'
-#  defines += [
-#    '-D__WINDOWS__',
-#    '-D__PLATFORM__=\"windows\"'
-#  ]
-#elif target_os == 'darwin'
-#  defines += [
-#    '-D__DARWIN__',
-#    '-D__PLATFORM__=\"darwin\"'
-#  ]
 else
   error('Current platform is not supported by gudp.')
 endif
@@ -36,9 +26,7 @@ defines += [
   '-D__NETCODE__=' + get_option('domain-type')
 ]
 
-project_sources = []
-project_header_files = []
-project_test_sources = []
+libs = []
 inc = [
   include_directories('include')
 ]
@@ -46,6 +34,11 @@ inc = [
 add_project_arguments(defines, language: 'c')
 
 subdir('src')
+
+gudp_dep = declare_dependency(
+  include_directories: inc,
+  link_with: libs
+)
 
 if get_option('enable-tests')
   inc += include_directories('tests')

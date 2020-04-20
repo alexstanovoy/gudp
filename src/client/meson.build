@@ -1,5 +1,4 @@
 client = files('client.c')
-project_sources += client
 client_lib = library(
   'client',
   client,
@@ -9,3 +8,4 @@ client_lib = library(
   ],
   include_directories : inc
 )
+libs += client_lib
