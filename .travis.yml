@@ -1,0 +1,41 @@
+dist: bionic
+group: travis_latest
+
+language:
+  - c
+
+compiler:
+  - gcc
+
+os:
+  - linux
+
+addons:
+  apt:
+    packages:
+      - gcovr
+      - doxygen
+      - python3-pip
+
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+install:
+  - pip3 install --user $(whoami) --upgrade pip
+  - pip3 install --user $(whoami) meson ninja
+
+script:
+  - meson build -Db_coverage=true
+  - cd build
+  - meson test
+  - ninja generate-docs
+  - ninja coverage
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -f build/meson-logs/coverage.xml
