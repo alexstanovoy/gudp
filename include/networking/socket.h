@@ -67,13 +67,9 @@ SocketsStartup();
 /**
  * @brief      Shutdowns the sockets.
  *
- * @return     SUCCESS if shutdown is successiful, and SOCKET_CLEANUP when error
- *             occures.
- *
  * @since      0.0.1
  */
-RETCODE
-SocketsShutdown();
+void SocketsShutdown();
 
 /**
  * @brief      Initializes a socket.
@@ -176,3 +172,6 @@ SocketReceive(Socket* sock, Data* buffer, Address* addr);
  */
 RETCODE
 SocketSetTimeout(Socket* sock, time_t milliseconds);
+
+RETCODE
+SocketMakeNonBlocking(Socket* sock);

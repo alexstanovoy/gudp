@@ -30,6 +30,7 @@ typedef enum {
   SOCKET_SEND,
   /// SocketReceive() error; Receive failed.
   SOCKET_RECEIVE,
+  SOCKET_MAKE_NONBLOCKING,
   /// SocketReceive() error; Returned after timeout reached. See
   /// SocketSetTimeout() for details.
   SOCKET_TIMEOUT,

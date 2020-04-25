@@ -9,6 +9,7 @@
 #include "networking/socket.h"
 
 #include <errno.h>
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -47,9 +48,7 @@ SocketsStartup() {
   return SUCCESS;
 }
 
-RETCODE
-SocketsShutdown() {
-  return SUCCESS;
+void SocketsShutdown() {
 }
 
 RETCODE
@@ -66,7 +65,7 @@ void SocketDestroy(Socket* sock) {
   if (sock->socket_fd != -1) {
     close(sock->socket_fd);
   }
-  THROW_OR_CONTINUE(SocketsShutdown());
+  SocketsShutdown();
 }
 
 RETCODE
@@ -145,6 +144,18 @@ SocketSetTimeout(Socket* sock, time_t milliseconds) {
   if (setsockopt(sock->socket_fd, SOL_SOCKET, SO_RCVTIMEO, (struct timeval*)&tv,
                  sizeof(struct timeval)) == -1) {
     return SOCKET_SETTIMEOUT;
+  }
+  return SUCCESS;
+}
+
+RETCODE
+SocketMakeNonBlocking(Socket* sock) {
+  int old_flags = fcntl(sock->socket_fd, F_GETFL);
+  if (old_flags < 0) {
+    return SOCKET_MAKE_NONBLOCKING;
+  }
+  if (fcntl(sock->socket_fd, F_SETFL, O_NONBLOCK | old_flags) < 0) {
+    return SOCKET_MAKE_NONBLOCKING;
   }
   return SUCCESS;
 }

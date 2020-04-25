@@ -58,5 +58,5 @@ if doxygen.found()
     ]
   )
 else
-  warning('Doxygen was\'nt found. "generate-docs" target won\'t be added.')
+  warning('Doxygen wasn\'t found. "generate-docs" target won\'t be added.')
 endif
