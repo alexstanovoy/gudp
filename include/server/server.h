@@ -117,3 +117,6 @@ ServerSend(Server* srv, Response* response);
  */
 RETCODE
 ServerSetTimeout(Server* srv, time_t milliseconds);
+
+RETCODE
+ServerMakeNonBlocking(Server* srv);

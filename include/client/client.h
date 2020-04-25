@@ -98,3 +98,6 @@ ClientSend(Client* client, Response* response);
  */
 RETCODE
 ClientSetTimeout(Client* client, time_t milliseconds);
+
+RETCODE
+ClientMakeNonBlocking(Client* client);

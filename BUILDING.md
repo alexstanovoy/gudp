@@ -47,7 +47,7 @@ $ ninja -C build test
 ### Generating documentation
 
 ```
-$ ninja -C build docs
+$ ninja -C build generate-docs
 ```
 
 ### Applying Clang format & Clang tidy

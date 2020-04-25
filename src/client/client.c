@@ -57,3 +57,9 @@ ClientSetTimeout(Client* client, time_t milliseconds) {
   THROW_OR_CONTINUE(SocketSetTimeout(&client->socket, milliseconds));
   return SUCCESS;
 }
+
+RETCODE
+ClientMakeNonBlocking(Client* client) {
+  THROW_OR_CONTINUE(SocketMakeNonBlocking(&client->socket));
+  return SUCCESS;
+}

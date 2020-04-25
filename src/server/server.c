@@ -96,3 +96,9 @@ ServerSetTimeout(Server* srv, time_t milliseconds) {
   THROW_OR_CONTINUE(SocketSetTimeout(&srv->socket, milliseconds));
   return SUCCESS;
 }
+
+RETCODE
+ServerMakeNonBlocking(Server* server) {
+  THROW_OR_CONTINUE(ServerMakeNonBlocking(&server->socket));
+  return SUCCESS;
+}
