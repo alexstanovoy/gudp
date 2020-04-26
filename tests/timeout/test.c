@@ -52,18 +52,17 @@ int main() {
   Panic(ServerInit(&srv, &addr));
   Panic(ServerSetTimeout(&srv, kTimeoutTime2));
   SetTimer();
-  assert(ServerReceive(&sock, &resp) == SOCKET_TIMEOUT);
+  assert(ServerReceive(&srv, &resp) == SOCKET_TIMEOUT);
   assert(GetTimer() >= kTimeoutTime2);
   ServerDestroy(&srv);
 
-  Panic(ClientInit(&srv, &addr));
-  Panic(ClientSetTimeout(&srv, kTimeoutTime2));
+  Panic(ClientInit(&clt, &addr));
+  Panic(ClientSetTimeout(&clt, kTimeoutTime2));
   SetTimer();
-  assert(ClientReceive(&sock, &resp) == SOCKET_TIMEOUT);
+  assert(ClientReceive(&clt, &resp) == SOCKET_TIMEOUT);
   assert(GetTimer() >= kTimeoutTime2);
-  ClientDestroy(&srv);
+  ClientDestroy(&clt);
 
   AddressDestroy(&addr);
   ResponseDestroy(&resp);
 }
-
