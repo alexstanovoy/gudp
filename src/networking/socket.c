@@ -140,7 +140,7 @@ SocketReceive(Socket* sock, Data* buffer, Address* addr) {
 RETCODE
 SocketSetTimeout(Socket* sock, time_t milliseconds) {
   struct timeval tv = (struct timeval){.tv_sec = milliseconds / 1000,
-                                       .tv_usec = milliseconds % 1000};
+                                       .tv_usec = milliseconds % 1000 * 1000};
   if (setsockopt(sock->socket_fd, SOL_SOCKET, SO_RCVTIMEO, (struct timeval*)&tv,
                  sizeof(struct timeval)) == -1) {
     return SOCKET_SETTIMEOUT;
