@@ -27,7 +27,11 @@ static const int kSocketProtocol = 0;
 RETCODE
 AddressInit(Address* addr, const char* ip, uint16_t port) {
   if (ip != NULL) {
-    addr->ip = inet_addr(ip);
+    if (strcmp(ip, "localhost") == 0) {
+      addr->ip = inet_addr("127.0.0.1");
+    } else {
+      addr->ip = inet_addr(ip);
+    }
   }
   addr->port = htons(port);
   return SUCCESS;
