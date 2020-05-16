@@ -41,9 +41,10 @@ SHOW_USED_FILES        = YES
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = include
+INPUT                  = docs/doxycfg/mainpage.md include/
 FILE_PATTERNS          = *.h
 RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = mainpage.md
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 

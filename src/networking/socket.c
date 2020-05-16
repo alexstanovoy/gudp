@@ -75,9 +75,7 @@ void SocketDestroy(Socket* sock) {
 RETCODE
 SocketBind(Socket* sock, Address* addr) {
   struct sockaddr_in bind_addr =
-      (struct sockaddr_in){.sin_family = kSocketDomain,
-                           .sin_addr = addr->ip,
-                           .sin_port = addr->port};
+      (struct sockaddr_in){.sin_family = kSocketDomain, .sin_port = addr->port};
   if (bind(sock->socket_fd, (const struct sockaddr*)&bind_addr,
            sizeof(struct sockaddr_in)) < 0) {
     return SOCKET_BIND;

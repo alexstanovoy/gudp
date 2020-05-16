@@ -2,10 +2,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "networking/socket.h"
-#include "server/server.h"
 #include "client/client.h"
+#include "networking/socket.h"
 #include "panic.h"
+#include "server/server.h"
 
 const char kLocalHost[] = "127.0.0.1";
 const int kPort = 51865;
