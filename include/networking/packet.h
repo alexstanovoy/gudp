@@ -19,7 +19,7 @@
 #include "common/retcode.h"
 
 /// Maximum packet size to send.
-const size_t kDataLength = 500;
+const size_t kDataLength;
 
 /**
  * @brief      A pair of the pointer to the array and length of the array.

@@ -1,5 +1,5 @@
 registrator = files('registrator.c')
-registrator_lib = library(
+registrator_lib = static_library(
   'registrator',
   registrator,
   link_with: socket_lib,
@@ -8,7 +8,7 @@ registrator_lib = library(
 libs += registrator_lib
 
 server = files('server.c')
-server_lib = library(
+server_lib = static_library(
   'server',
   server,
   link_with: [

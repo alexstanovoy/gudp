@@ -6,6 +6,8 @@
 #include "common/macro.h"
 #include "common/retcode.h"
 
+const size_t kDataLength = 500;
+
 RETCODE
 DataInit(Data* data) {
   if ((data->ptr = malloc(kDataLength)) == NULL) {

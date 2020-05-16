@@ -14,7 +14,7 @@
 #include "networking/socket.h"
 
 /// The maximum number of clients supported for the moment.
-static const int kBaseClients = 65535;
+static const int kBaseClients;
 
 /**
  * @brief      The structure to represent connected client.

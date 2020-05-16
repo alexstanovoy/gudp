@@ -1,5 +1,5 @@
 packet = files('packet.c')
-packet_lib = library(
+packet_lib = static_library(
   'packet',
   packet,
   include_directories : inc
@@ -7,7 +7,7 @@ packet_lib = library(
 libs += packet_lib
 
 socket = files('socket.c')
-socket_lib = library(
+socket_lib = static_library(
   'socket',
   socket,
   include_directories : inc

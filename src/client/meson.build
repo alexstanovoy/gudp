@@ -1,5 +1,5 @@
 client = files('client.c')
-client_lib = library(
+client_lib =  static_library(
   'client',
   client,
   link_with: [

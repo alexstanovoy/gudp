@@ -8,6 +8,8 @@
 #include "networking/socket.h"
 #include "server/server.h"
 
+static const int kBaseClients = 65535;
+
 RETCODE
 ConnectedClientInit(ConnectedClient* client) {
   THROW_OR_CONTINUE(AddressInit(&client->addr, NULL, 0));
